@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 // Import the Trip model and AuthenticationService if needed
 
 
 const TripCardComponent = ({ trip }) => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [isLoggedin, setIsLoggedIn] = useState(false);
 
   //This effect will run once when the component mounts
@@ -17,7 +17,7 @@ const TripCardComponent = ({ trip }) => {
     //Remove the trip code from local storage and set it to the new trip code
     localStorage.removeItem('tripCode');
     localStorage.setItem('tripCode', trip.code);
-    history.push('/edit-trip'); //Navigate to the edit-trip page
+    navigate.push('/edit-trip'); //Navigate to the edit-trip page
   };
 
   return (

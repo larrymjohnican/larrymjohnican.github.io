@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useForm, Form } from '@hooks/use-form';
 import { TripDataService } from '../services/trip-data.service';
 
 //This component will edit a trip
 const EditTripComponent = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [trip, setTrip] = useState(null);
   const [message, setMessage] = useState('');
   const [submitted, setSubmitted] = useState(false);
@@ -28,7 +28,7 @@ const EditTripComponent = () => {
     const tripCode = localStorage.getItem("tripCode");
     if (!tripCode) {
       alert("Something wrong, couldn't find where I stashed tripCode!");
-      history.push('/');
+      navigate.push('/');
       return;
     }
     console.log('EditTripComponent::useEffect');
@@ -54,7 +54,7 @@ const EditTripComponent = () => {
       TripDataService.updateTrip(editForm.value)
         .then((response) => {
           console.log(response);
-          history.push('/');
+          navigate.push('/');
         })
         .catch((error) => {
           console.log('Error: ' + error);

@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 const TripListingComponent = () => {
   //Initialize state variables for trips and message
   const [trips, setTrips] = useState([]);
   const [message, setMessage] = useState('');
-  const history = useHistory(); // Get the browser's history object
+  const navigate = useNavigate(); // Get the browser's Navigate object
   const tripDataService = new TripDataService(); 
 
   //Define an addTrip function to navigate to the add-trip page
   const addTrip = () => {
-    history.push('/add-trip'); //Navigate to the add-trip page
+    navigate.push('/add-trip'); //Navigate to the add-trip page
   };
 // Use the useEffect hook to make a request to the trip data service when the component mounts
   useEffect(() => {

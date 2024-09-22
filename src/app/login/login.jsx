@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 // Define a React functional component for the login page
 const LoginComponent = () => {
-  const history = useHistory();
+  const navigate = useNavigate();
   const [formError, setFormError] = useState('');
   const [submitted, setSubmitted] = useState(false);
   const [credentials, setCredentials] = useState({
@@ -17,7 +17,7 @@ const LoginComponent = () => {
     setFormError('');
     if (!credentials.email || !credentials.password || !credentials.name) {
       setFormError('All fields are required, please try again');
-      history.push('/'); 
+      navigate.push('/'); 
     } else {
       doLogin();
     }
@@ -35,11 +35,11 @@ const LoginComponent = () => {
     // Call the authentication service to login the user
 
     if (timer) {
-      history.push('/'); // Navigate to the home page after login
+      navigate.push('/'); // Navigate to the home page after login
     } else {
       const timer = setTimeout(() => {
         if (timer) {
-          history.push('/'); // Navigate to the home page after 3 seconds
+          navigate.push('/'); // Navigate to the home page after 3 seconds
         }
       }, 3000);
     }

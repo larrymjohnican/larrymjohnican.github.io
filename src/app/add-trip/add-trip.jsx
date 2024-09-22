@@ -22,7 +22,7 @@ const AddTripComponent = () => {
     const { name, value } = e.target;
     setAddForm({
       ...addForm,
-      [name]: value
+      [name]: value 
     });
   };
 
