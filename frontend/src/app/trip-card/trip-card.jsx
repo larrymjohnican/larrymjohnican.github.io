@@ -1,30 +1,31 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// Import the Trip model and AuthenticationService if needed
-
-
 const TripCardComponent = ({ trip }) => {
   const navigate = useNavigate();
-  const [isLoggedin, setIsLoggedIn] = useState(false);
-
-  //This effect will run once when the component mounts
-  useEffect(() => {
-    //Set the isLoggedIn state based on the authentication service
-    setIsLoggedIn(!!window.localStorage.getItem('tripCode'));
-  }, []);
-
-  const editTrip = () => {
-    //Remove the trip code from local storage and set it to the new trip code
-    localStorage.removeItem('tripCode');
-    localStorage.setItem('tripCode', trip.code);
-    navigate.push('/edit-trip'); //Navigate to the edit-trip page
-  };
-
+  const isLoggedin = window.localStorage.getItem('tripCode') !== null;
   return (
-    <div>
-      {/* Add your component template here */}
+    <div class="card">
+      <div class="card-header">{trip.name}</div>
+      <img src={`assets/images/${trip.image}`} alt="trip thumbnail" class="card-img-top"></img>
+      <div class="card-body">
+        <h6 class="card-subtitle mb-2 text-muted">{trip.resort}</h6>
+        <p class="card-subtitle mt-3 mb-3 text-muted">${trip.length} only ${trip.perPerson | currency: 'USD': 'symbol'} per person</p>
+        <p class="card-text" dangerouslySetInnerHTML={{ __html: trip.description }}></p>
+        {isLoggedin && (
+          <div>
+            <button onClick={() => editTrip(trip)} class="btn btn-info">Edit Trip</button>
+          </div>
+        )}
+      </div>
     </div>
   );
+
+  const editTrip = (trip) => {
+    // Remove the trip code from local storage and set it to the new trip code
+    localStorage.removeItem('tripCode');
+    localStorage.setItem('tripCode', trip.code);
+    navigate.replace('/edit-trip'); // Navigate to the edit-trip page
+  };
 };
 
 export default TripCardComponent;
