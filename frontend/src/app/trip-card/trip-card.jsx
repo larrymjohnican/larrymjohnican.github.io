@@ -1,27 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { formatCurrency } from '../util/utils';
+
 const TripCardComponent = ({ trip }) => {
+  const [loggedIn, setLoggedIn] = useState(false);
   const navigate = useNavigate();
-  const isLoggedin = window.localStorage.getItem('tripCode') !== null;
+
+  useEffect(() => {
+    if (localStorage.getItem('logged-in')) {
+      setLoggedIn(true);
+    }
+  }, []);
+
   return (
-    <div class="card">
-      <div class="card-header">{trip.name}</div>
-      <img src={`assets/images/${trip.image}`} alt="trip thumbnail" class="card-img-top"></img>
-      <div class="card-body">
-        <h6 class="card-subtitle mb-2 text-muted">{trip.resort}</h6>
-        <p class="card-subtitle mt-3 mb-3 text-muted">${trip.length} only ${trip.perPerson | currency: 'USD': 'symbol'} per person</p>
-        <p class="card-text" dangerouslySetInnerHTML={{ __html: trip.description }}></p>
-        {isLoggedin && (
-          <div>
-            <button onClick={() => editTrip(trip)} class="btn btn-info">Edit Trip</button>
-          </div>
-        )}
-      </div>
+    <div className="card">
+      <img src={trip.image} alt={trip.name} />
+      <h2>{trip.name}</h2>
+      <p>Per Person: {formatCurrency(trip.perPerson)}</p>
+      <button onClick={() => editTrip(trip)} className="btn btn-info">Edit Trip</button>
     </div>
   );
 
   const editTrip = (trip) => {
-    // Remove the trip code from local storage and set it to the new trip code
+    if (!trip.code) return;
     localStorage.removeItem('tripCode');
     localStorage.setItem('tripCode', trip.code);
     navigate.replace('/edit-trip'); // Navigate to the edit-trip page
