@@ -1,89 +1,42 @@
-import React, { useState } from 'react';
+import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
 
-const LoginForm = () => {
-  const [credentials, setCredentials] = useState({
-    name: '',
-    email: '',
-    password: ''
-  });
-  
-  const [formError, setFormError] = useState('');
-
-  const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCredentials({
-      ...credentials,
-      [name]: value
-    });
-  };
-
-  const onLoginSubmit = (e) => {
-    e.preventDefault();
-    // Logic to handle form submission
-    if (!credentials.name || !credentials.email || !credentials.password) {
-      setFormError('All fields are required');
-    } else {
-      setFormError('');
-      console.log('Form submitted successfully', credentials);
-      // Add actual login logic here
-    }
-  };
-
+export function LoginForm({ credentials, handleInputChange, onLoginSubmit }) {
   return (
-    <div className="row">
-      <div className="col-12 col-md-8">
-        <h2>Login</h2>
-        <form onSubmit={onLoginSubmit}>
-          {formError && (
-            <div role="alert" className="alert alert-danger">
-              {formError}
-            </div>
-          )}
-          
-          <div className="form-group">
-            <label htmlFor="name">Name</label>
-            <input
-              type="text"
-              name="name"
-              placeholder="Enter Name"
-              value={credentials.name}
-              onChange={handleChange}
-              className="form-control"
-            />
+    <Card className="max-w-sm">
+      <form className="flex flex-col gap-4" onSubmit={onLoginSubmit}>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="email" value="Your email" />
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="email">Email Address</label>
-            <input
-              type="email"
-              name="email"
-              placeholder="Enter email address"
-              value={credentials.email}
-              onChange={handleChange}
-              className="form-control"
-            />
+          <TextInput
+            id="email"
+            type="email"
+            placeholder="name@flowbite.com"
+            required
+            value={credentials.email}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div>
+          <div className="mb-2 block">
+            <Label htmlFor="password" value="Your password" />
           </div>
-          
-          <div className="form-group">
-            <label htmlFor="password">Password</label>
-            <input
-              type="password"
-              name="password"
-              placeholder="e.g. 12+ alphanumerics"
-              value={credentials.password}
-              onChange={handleChange}
-              className="form-control"
-              id="password"
-            />
-          </div>
-          
-          <button type="submit" className="btn btn-primary">
-            Sign In!
-          </button>
-        </form>
-      </div>
-    </div>
+          <TextInput
+            id="password"
+            type="password"
+            required
+            value={credentials.password}
+            onChange={handleInputChange}
+          />
+        </div>
+        <div className="flex items-center gap-2">
+          <Checkbox id="remember" />
+          <Label htmlFor="remember">Remember me</Label>
+        </div>
+        <Button type="submit">Submit</Button>
+      </form>
+    </Card>
   );
-};
+}
 
 export default LoginForm;
