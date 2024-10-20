@@ -2,12 +2,14 @@
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import Home from './app/home/home'; // Import the Home page component
 import TripCardComponent from './app/trip-card/trip-card'; // Import the Trip Card component
+import Menubar from '../src/forms/menubar';
 
 // Define the App component
 function App() {
   return (
     // Wrap the app in a BrowserRouter to enable client-side routing
     <BrowserRouter>
+    <Menubar />
       {/* Define the Routes for the app */}
       <Routes>
         {/* Route for Add Trip, maps '/add-trip' URL to the TripCardComponent */}

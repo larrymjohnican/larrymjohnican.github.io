@@ -12,6 +12,13 @@ const TripCardComponent = ({ trip }) => {
     }
   }, []);
 
+  const editTrip = (trip) => {
+    if (!trip.code) return;
+    localStorage.removeItem('tripCode');
+    localStorage.setItem('tripCode', trip.code);
+    navigate.replace('/edit-trip'); // Navigate to the edit-trip page
+  };
+
   return (
     <div className="card">
       <img src={trip.image} alt={trip.name} />
@@ -20,13 +27,6 @@ const TripCardComponent = ({ trip }) => {
       <button onClick={() => editTrip(trip)} className="btn btn-info">Edit Trip</button>
     </div>
   );
-
-  const editTrip = (trip) => {
-    if (!trip.code) return;
-    localStorage.removeItem('tripCode');
-    localStorage.setItem('tripCode', trip.code);
-    navigate.replace('/edit-trip'); // Navigate to the edit-trip page
-  };
 };
 
 export default TripCardComponent;
