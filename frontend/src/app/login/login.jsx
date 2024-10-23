@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../forms/login-form'; // Import the LoginForm component
-import background from '../../images/bg-pattern.jpg';
 
 const LoginComponent = () => {
   const navigate = useNavigate();

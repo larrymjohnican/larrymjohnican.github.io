@@ -1,7 +1,9 @@
 import { Button, Card, Checkbox, Label, TextInput } from "flowbite-react";
+import background from '../images/bg-pattern.jpg';
 
 export function LoginForm({ credentials, handleInputChange, onLoginSubmit }) {
   return (
+    <div className="bg-fixed min-h-screen bg-cover flex justify-center items-center" style={{ backgroundImage: `url(${background})`, zIndex: 0 }}>
     <Card className="max-w-sm">
       <form className="flex flex-col gap-4" onSubmit={onLoginSubmit}>
         <div>
@@ -36,6 +38,7 @@ export function LoginForm({ credentials, handleInputChange, onLoginSubmit }) {
         <Button type="submit">Submit</Button>
       </form>
     </Card>
+    </div>
   );
 }
 
