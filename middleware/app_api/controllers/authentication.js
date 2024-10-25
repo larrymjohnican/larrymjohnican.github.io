@@ -1,69 +1,37 @@
-const passport = require('passport');
 const mongoose = require('mongoose');
-const User = require('../../app_api/models/user');
+const crypto = require('crypto');
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 
+// Define the User schema
+const userSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  email: { type: String, required: true, unique: true },
+  hash: String,
+  salt: String
+});
 
-const register = async(req, res) => {
-    //validate message to insure that all parameters are present
-    if (!req.body.name || !req.body.email || !req.body.password) {
-       return res
-        .status(400)
-        .json({"message": "All fields required"});
-    }
-
-    const user = new User(
-        {
-            name: req.body.name, //Set User name
-            email: req.body.email, // Set email address
-            password: '' //Start with empty password
-        });
-
-    user.setPassword(req.body.password); //Set user password
-    const q = await user.save();
-
-    if(!q)
-    {
-        //Database returned no data
-        return res
-         .status(400)
-         .json(err);
-    }  else {
-        //Return new user token
-        const token = user.generateJwt();
-        return res
-         .status(200)
-         .json({token});
-    }
+// Method to set password and hash it using bcrypt
+userSchema.methods.setPassword = async function(password) {
+  this.salt = await bcrypt.genSalt(10);
+  this.hash = await bcrypt.hash(password, this.salt);
 };
 
-const login = (req, res) => {
-    //Validate message to ensure that email and password are present.
-    if (!req.body.email || !req.body.password) {
-        return res
-         .status(400)
-         .json({"message": "All fields required"});
-    }
-    //Delegate authentication to passport module
-    passport.authenticate('local', (err, user, info) => {
-        if (err) { //Error in Authentication Process
-            return res
-             .status(404)
-             .json(err);
-        }
-        if (user) { //Auth succeeded - generate JWT and return to caller
-            const token = user.generateJwt();
-            res
-             .status(200)
-             .json({token});
-        } else { //Auth failed return error
-          res
-            .status(401)
-            .json(info);
-        }
-    }) (req,res);
+// Method to validate password
+userSchema.methods.validatePassword = async function(password) {
+  return bcrypt.compare(password, this.hash);
 };
 
-module.exports = {
-    register,
-    login
+// Method to generate JWT
+userSchema.methods.generateJwt = function() {
+  return jwt.sign({
+    _id: this._id,
+    email: this.email,
+    name: this.name
+  }, process.env.JWT_SECRET, { expiresIn: '1h' });
 };
+
+// Create the User model
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;

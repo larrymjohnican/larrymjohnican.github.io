@@ -3,27 +3,33 @@ const LocalStrategy = require('passport-local').Strategy;
 const mongoose = require('mongoose');
 const User = require('../../app_api/models/user');
 
-
+// Set up the local strategy using Passport.js
 passport.use(new LocalStrategy({
-    usernameField: 'email'
+    usernameField: 'email' // Use 'email' as the username field
   },
   async (username, password, done) => {
-    const q = await User
-         .findOne({ email: username})
-         .exec();
+    try {
+      // Query the database for a user with the provided email
+      const user = await User.findOne({ email: username }).exec();
 
-         //Uncomment the folowing ine to show results of querey
-         //on the console
-         //console.log(q);
+      // Uncomment the following line to log the query result in the console
+      // console.log(user);
 
-         if(!q) //if the DB returned no records, the user doesn't exist
-         {   
-            return done(null,false,{message: 'Incorrect Username'});
-         }
-         if(!q.validPassword(password)) //Validate password
-         {
-            return done(nulll, false, {message: 'Incorrect Password'});
-         }
-         return done(null,q); //Everything is ok, return user object
-    }     
+      // If the user is not found in the database
+      if (!user) {
+        return done(null, false, { message: 'Incorrect Username' });
+      }
+
+      // Check if the provided password matches the stored hashed password
+      const isPasswordValid = await user.validPassword(password);
+      if (!isPasswordValid) {
+        return done(null, false, { message: 'Incorrect Password' });
+      }
+
+      // Everything is OK, return the user object
+      return done(null, user);
+    } catch (err) {
+      return done(err);
+    }
+  }
 ));

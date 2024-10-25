@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../forms/login-form'; // Import the LoginForm component
 
@@ -40,8 +40,8 @@ const LoginComponent = () => {
     const timer = setTimeout(() => {
       navigate('/'); // Navigate to home after 3 seconds
     }, 3000);
-    
-    return () => clearTimeout(timer);
+
+    return () => clearTimeout(timer); // Clean up the timer when component unmounts
   };
 
   // Handle input change
@@ -55,13 +55,13 @@ const LoginComponent = () => {
 
   return (
     <div>
-      <h2>Login</h2>
+      <h2 className="text-center text-2xl mb-4">Login</h2>
       <LoginForm
         credentials={credentials}
         handleInputChange={handleInputChange}
         onLoginSubmit={onLoginSubmit}
+        formError={formError} // Pass the error message as a prop
       />
-      {formError && <p style={{ color: 'red' }}>{formError}</p>}
     </div>
   );
 };
