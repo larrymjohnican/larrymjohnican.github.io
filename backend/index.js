@@ -1,32 +1,29 @@
-// Import necessary modules
+// backend/index.js / main server file)
 const express = require('express');
 const http = require('http');
 const cors = require('cors');
 const dotenv = require('dotenv');
-const { connectToDatabase } = require('./config/database');
-
-// Initialize dotenv to use environment variables
+const { connectToDatabase } = require('./config/database'); 
 dotenv.config();
 
-// Initialize Express app
 const app = express();
 const hostname = 'localhost';
 const port = 3000;
 
-// Middleware
-app.use(cors()); // Enable CORS for all routes
-app.use(express.json()); // To handle JSON requests
+app.use(cors());
+app.use(express.json());
 
-// Database connection
-connectToDatabase(process.env.MONGODB_URI || 'mongodb://localhost:27017')
-  .then(() => console.log('Connected to MongoDB'))
-  .catch((err) => console.error('Failed to connect to MongoDB:', err));
+// Connect to the database
+connectToDatabase();
 
-// Import Routes
+// Import and use routes
 const userRoutes = require('./routes/users');
+const travelRoutes = require('./routes/travel');
+const authRoutes = require('./routes/auth'); // Import the new auth routes
 
-// Use routes
 app.use('/users', userRoutes);
+app.use('/travel', travelRoutes);
+app.use('/auth', authRoutes); // Use /auth for authentication routes
 
 // Define a simple route for the root
 app.get('/', (req, res) => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import LoginForm from '../../forms/login-form'; // Import the LoginForm component
 
@@ -35,13 +35,33 @@ const LoginComponent = () => {
     doLogin();
   };
 
-  // Simulate login process
-  const doLogin = () => {
-    const timer = setTimeout(() => {
-      navigate('/'); // Navigate to home after 3 seconds
-    }, 3000);
+  // Login process with JWT
+  const doLogin = async () => {
+    try {
+      const response = await fetch('http://localhost:3000/auth/login', { // Update URL to your backend endpoint
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(credentials),
+      });
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        setFormError(errorData.message || 'Login failed');
+        return;
+      }
 
-    return () => clearTimeout(timer); // Clean up the timer when component unmounts
+      const data = await response.json();
+      const token = data.token; // JWT token from backend response
+
+      // Save token in localStorage
+      localStorage.setItem('jwtToken', token);
+
+      // Navigate to home page
+      navigate('/');
+    } catch (error) {
+      console.error('Login error:', error);
+      setFormError('An error occurred while logging in');
+    }
   };
 
   // Handle input change
@@ -62,6 +82,7 @@ const LoginComponent = () => {
         onLoginSubmit={onLoginSubmit}
         formError={formError} // Pass the error message as a prop
       />
+      {formError && <p className="text-red-500 text-center mt-2">{formError}</p>}
     </div>
   );
 };
