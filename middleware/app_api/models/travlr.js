@@ -16,4 +16,5 @@ const tripSchema = new mongoose.Schema({
 
 // Create and export the Trip model
 const Trip = mongoose.model('Trip', tripSchema); // Changed 'trips' to 'Trip'
+
 module.exports = Trip;
