@@ -1,3 +1,40 @@
-theme: jekyll-theme-minimal
-title: Octocat's homepage
-description: Bookmark this to keep an eye on my project updates!
+# Site settings
+title: "Your Site Title"
+description: "A brief description of your site"
+author: "Your Name"
+email: your-email@example.com
+url: "https://username.github.io" # Your GitHub Pages URL
+baseurl: "" # Leave blank for user/organization site; for project site, add "/repository-name"
+
+# GitHub Pages theme
+theme: jekyll-theme-cayman # You can change this to any Jekyll theme available on GitHub Pages
+
+# Markdown options
+markdown: kramdown
+highlighter: rouge # Code syntax highlighting
+
+# Enable pagination
+plugins:
+  - jekyll-paginate # Add other plugins if needed
+
+# Build settings
+exclude:
+  - README.md # Files or directories to exclude from the build
+  - node_modules # If you have dependencies you don't want published
+
+# Custom variables (optional)
+custom_variable: "Custom value here" # You can add custom variables for templates
+
+# Permalinks (optional)
+permalink: /:categories/:title/ # Customize URL structure if needed
+
+# Jekyll configuration for debugging
+future: false # Process posts with future dates if set to true
+lsi: false # Enable related posts based on LSI (requires plugin)
+
+# Social links (optional)
+social_links:
+  - name: GitHub
+    url: "https://github.com/username"
+  - name: LinkedIn
+    url: "https://linkedin.com/in/username"
